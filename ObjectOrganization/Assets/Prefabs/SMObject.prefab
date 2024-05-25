@@ -151,3 +151,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 85d5c811225985142874ac27c6924aa3, type: 2}
+  textData:
+    selectedText: Test4
