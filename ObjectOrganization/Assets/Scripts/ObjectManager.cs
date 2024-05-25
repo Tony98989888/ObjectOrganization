@@ -8,7 +8,6 @@ public class ObjectManager : MonoBehaviour
 
     private void Awake()
     {
-        // 初始化八叉树，根据场景大小设置边界
         octree = new Octree(new Bounds(Vector3.zero, new Vector3(1000, 1000, 1000)), 0);
     }
 

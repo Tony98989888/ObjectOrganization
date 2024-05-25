@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+// Scene Markup Component
+
 using UnityEngine;
 
-
-// Scene Markup Component
-public class SMComponent : MonoBehaviour
+public class SMComponent : SceneObject
 {
-    
+    [SerializeField]
+    private SMData data;
 }

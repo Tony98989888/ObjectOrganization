@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class ObjectSpawner : MonoBehaviour
 {
-    public GameObject objectPrefab; // 要生成的物体的预设
-    public int numberOfObjects = 100; // 要生成的物体的数量
-    public Vector3 spawnAreaSize = new Vector3(1000, 1000, 1000); // 生成区域的大小
+    public GameObject objectPrefab;
+    public int numberOfObjects = 100;
+    public Vector3 spawnAreaSize = new Vector3(1000, 1000, 1000);
 
     private ObjectManager objectManager;
 
@@ -29,7 +29,7 @@ public class ObjectSpawner : MonoBehaviour
         GameObject newObject = Instantiate(objectPrefab, randomPosition, Quaternion.identity);
         if (newObject.GetComponent<SceneObject>() == null)
         {
-            newObject.AddComponent<SceneObject>(); // 添加 SceneObject 脚本以注册到 ObjectManager
+            newObject.AddComponent<SceneObject>();
         }
     }
 }
