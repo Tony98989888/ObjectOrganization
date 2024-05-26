@@ -32,7 +32,7 @@ public class FreeFormInfo
 public class PredefinedInfo
 {
     public SMObjectType Type;
-    public string Value;
+    public TextData Value;
     public TextData ShortDescription;
-    [TextArea] public string LongDescription;
+    public TextData LongDescription;
 }

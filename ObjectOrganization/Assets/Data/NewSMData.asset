@@ -21,8 +21,47 @@ MonoBehaviour:
     PriorityOverride: 0
   PredefinedInformation:
   - Type: 0
-    Value: 
+    Value:
+      selectedText: "Alfyn\uFF1AYou can find lots of rare plants and herbs in this
+        lands.Especially lion's ear and sweet wormwood-a dash of each makes nearly
+        every salve better.When I was studyin'to be an apothecary.I sometimes journeyed
+        out here in search of ingredients."
     ShortDescription:
-      selectedText: Test4
-    LongDescription: 
-  IneractionRange: 0
+      selectedText: "Cyrus\uFF1ABut of course!It is one of the central rites of the
+        church\uFF0Cheld every twenty years.The embers borne from Flamesgrace feed
+        the sacred fires across the land.Many people know of the Kindling,but few
+        have the opportunity to witness it first hand.It shall be the experience
+        of a life time."
+    LongDescription:
+      selectedText: "Alfyn\uFF1AYou can find lots of rare plants and herbs in this
+        lands.Especially lion's ear and sweet wormwood-a dash of each makes nearly
+        every salve better.When I was studyin'to be an apothecary.I sometimes journeyed
+        out here in search of ingredients."
+  - Type: 0
+    Value:
+      selectedText: "Cyrus\uFF1ABut of course!It is one of the central rites of the
+        church\uFF0Cheld every twenty years.The embers borne from Flamesgrace feed
+        the sacred fires across the land.Many people know of the Kindling,but few
+        have the opportunity to witness it first hand.It shall be the experience
+        of a life time."
+    ShortDescription:
+      selectedText: Alfyn:Here,look at this one.White skullcap,they call it.The petals
+        are good for fevers.I grind them with root starch and honey.
+    LongDescription:
+      selectedText: Alfyn:I s'ppose it is pretty to look at.Here,you can have this
+        one of you like.
+  - Type: 0
+    Value:
+      selectedText: "Alfyn\uFF1AYou can find lots of rare plants and herbs in this
+        lands.Especially lion's ear and sweet wormwood-a dash of each makes nearly
+        every salve better.When I was studyin'to be an apothecary.I sometimes journeyed
+        out here in search of ingredients."
+    ShortDescription:
+      selectedText: Alfyn:Here,look at this one.White skullcap,they call it.The petals
+        are good for fevers.I grind them with root starch and honey.
+    LongDescription:
+      selectedText: "Alfyn\uFF1AYou can find lots of rare plants and herbs in this
+        lands.Especially lion's ear and sweet wormwood-a dash of each makes nearly
+        every salve better.When I was studyin'to be an apothecary.I sometimes journeyed
+        out here in search of ingredients."
+  IneractionRange: 3

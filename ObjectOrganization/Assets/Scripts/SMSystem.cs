@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class ObjectManager : MonoBehaviour
+public class SMSystem : MonoBehaviour
 {
     private Dictionary<int, SceneObjectData> objectDictionary = new Dictionary<int, SceneObjectData>();
     private Octree octree;

@@ -3,11 +3,11 @@ using UnityEngine;
 public class SceneObject : MonoBehaviour
 {
     private SceneObjectData data;
-    private ObjectManager manager;
+    protected SMSystem manager;
 
-    private void Start()
+    protected virtual void Start()
     {
-        manager = FindObjectOfType<ObjectManager>();
+        manager = FindObjectOfType<SMSystem>();
         data = new SceneObjectData(GetInstanceID(), transform.position, true);
         manager.RegisterObject(data);
     }
@@ -20,7 +20,7 @@ public class SceneObject : MonoBehaviour
         }
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         data.UpdatePosition(transform.position);
     }

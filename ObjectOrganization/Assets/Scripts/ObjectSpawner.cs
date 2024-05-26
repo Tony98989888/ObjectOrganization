@@ -6,11 +6,11 @@ public class ObjectSpawner : MonoBehaviour
     public int numberOfObjects = 100;
     public Vector3 spawnAreaSize = new Vector3(1000, 1000, 1000);
 
-    private ObjectManager objectManager;
+    private SMSystem _smSystem;
 
     private void Start()
     {
-        objectManager = FindObjectOfType<ObjectManager>();
+        _smSystem = FindObjectOfType<SMSystem>();
 
         for (int i = 0; i < numberOfObjects; i++)
         {

@@ -7,6 +7,7 @@ public class TextSelectionWindow : EditorWindow
     private static TextDataList textDataList;
     private Vector2 scrollPosition;
     private GUIStyle buttonStyle;
+    private string searchText = string.Empty;
 
     public static void Open(SerializedProperty prop, TextDataList list)
     {
@@ -21,10 +22,9 @@ public class TextSelectionWindow : EditorWindow
     {
         buttonStyle = new GUIStyle(GUI.skin.button)
         {
-            alignment = TextAnchor.MiddleCenter,
-            fontSize = 12,
-            normal = { textColor = Color.cyan },
-            hover = { textColor = Color.magenta }
+            wordWrap = true,
+            alignment = TextAnchor.MiddleLeft,
+            fontSize = 18,
         };
     }
 
@@ -37,22 +37,33 @@ public class TextSelectionWindow : EditorWindow
         }
 
         EditorGUILayout.LabelField("Select a text", EditorStyles.boldLabel);
-        
+
+        // 搜索栏
+        EditorGUILayout.BeginHorizontal("box");
+        EditorGUILayout.LabelField("Search:", GUILayout.Width(50));
+        searchText = EditorGUILayout.TextField(searchText);
+        EditorGUILayout.EndHorizontal();
+
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
         foreach (var text in textDataList.texts)
         {
-            EditorGUILayout.BeginVertical("box");
-            if (GUILayout.Button(text, buttonStyle))
+            if (string.IsNullOrEmpty(searchText) || text.ToLower().Contains(searchText.ToLower()))
             {
-                property.stringValue = text;
-                property.serializedObject.ApplyModifiedProperties();
-                Close();
+                // 使用一个框来显示每个项目
+                EditorGUILayout.BeginVertical("box");
+                if (GUILayout.Button(text, buttonStyle))
+                {
+                    property.stringValue = text;
+                    property.serializedObject.ApplyModifiedProperties();
+                    Close();
+                }
+
+                EditorGUILayout.EndVertical();
+                EditorGUILayout.Space();
             }
-            EditorGUILayout.EndVertical();
-            EditorGUILayout.Space();
         }
-        
+
         EditorGUILayout.EndScrollView();
     }
 }
