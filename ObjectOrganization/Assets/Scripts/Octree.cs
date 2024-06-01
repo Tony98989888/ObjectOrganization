@@ -3,51 +3,48 @@ using UnityEngine;
 
 public class Octree
 {
-    private const int MAX_OBJECTS = 8;
+    private const int MAX_OBJECTS_PER_NODE = 8;
     private const int MAX_LEVELS = 5;
+    private readonly List<SMComponent> m_components;
 
-    private int level;
-    private List<SceneObjectData> objects;
-    private Bounds bounds;
-    private Octree[] nodes;
+    private readonly int m_level;
+    private readonly Octree[] m_nodes;
+    private Bounds m_bounds;
 
     public Octree(Bounds bounds, int level)
     {
-        this.level = level;
-        this.bounds = bounds;
-        objects = new List<SceneObjectData>();
-        nodes = new Octree[8];
+        m_level = level;
+        m_bounds = bounds;
+        m_components = new List<SMComponent>();
+        m_nodes = new Octree[8];
     }
 
-    public void Insert(SceneObjectData obj)
+    public void Insert(SMComponent component)
     {
-        if (nodes[0] != null)
+        if (m_nodes[0] != null)
         {
-            int index = GetIndex(obj.Position);
+            var index = GetIndex(component.transform.position);
             if (index != -1)
             {
-                nodes[index].Insert(obj);
+                m_nodes[index].Insert(component);
                 return;
             }
         }
 
-        objects.Add(obj);
+        m_components.Add(component);
 
-        if (objects.Count > MAX_OBJECTS && level < MAX_LEVELS)
+        if (m_components.Count > MAX_OBJECTS_PER_NODE && m_level < MAX_LEVELS)
         {
-            if (nodes[0] == null)
-            {
-                Split();
-            }
+            if (m_nodes[0] == null) Split();
 
-            int i = 0;
-            while (i < objects.Count)
+            var i = 0;
+            while (i < m_components.Count)
             {
-                int index = GetIndex(objects[i].Position);
+                var index = GetIndex(m_components[i].transform.position);
                 if (index != -1)
                 {
-                    nodes[index].Insert(objects[i]);
-                    objects.RemoveAt(i);
+                    m_nodes[index].Insert(m_components[i]);
+                    m_components.RemoveAt(i);
                 }
                 else
                 {
@@ -57,77 +54,70 @@ public class Octree
         }
     }
 
-    public void Remove(SceneObjectData obj)
+    public void Remove(SMComponent component)
     {
-        int index = GetIndex(obj.Position);
-        if (index != -1 && nodes[0] != null)
-        {
-            nodes[index].Remove(obj);
-        }
+        var index = GetIndex(component.transform.position);
+        if (index != -1 && m_nodes[0] != null)
+            m_nodes[index].Remove(component);
         else
-        {
-            objects.Remove(obj);
-        }
+            m_components.Remove(component);
     }
 
-    public List<SceneObjectData> QueryRange(Bounds range)
+    public List<SMComponent> QueryRange(Bounds bounds)
     {
-        List<SceneObjectData> returnObjects = new List<SceneObjectData>();
+        var returnObjects = new List<SMComponent>();
 
-        if (!bounds.Intersects(range))
-        {
-            return returnObjects;
-        }
+        if (!m_bounds.Intersects(bounds)) return returnObjects;
 
-        foreach (var obj in objects)
-        {
-            if (range.Contains(obj.Position))
-            {
-                returnObjects.Add(obj);
-            }
-        }
+        foreach (var component in m_components)
+            if (bounds.Contains(component.transform.position))
+                returnObjects.Add(component);
 
-        if (nodes[0] != null)
-        {
-            for (int i = 0; i < 8; i++)
-            {
-                returnObjects.AddRange(nodes[i].QueryRange(range));
-            }
-        }
+        if (m_nodes[0] != null)
+            for (var i = 0; i < 8; i++)
+                returnObjects.AddRange(m_nodes[i].QueryRange(bounds));
 
         return returnObjects;
     }
 
     private void Split()
     {
-        float subWidth = bounds.size.x / 2f;
-        float subHeight = bounds.size.y / 2f;
-        float subDepth = bounds.size.z / 2f;
+        var subWidth = m_bounds.size.x * 0.5f;
+        var subHeight = m_bounds.size.y * 0.5f;
+        var subDepth = m_bounds.size.z * 0.5f;
 
-        Vector3 size = new Vector3(subWidth, subHeight, subDepth);
-        Vector3 center = bounds.center;
+        var size = new Vector3(subWidth, subHeight, subDepth);
+        var center = m_bounds.center;
 
-        nodes[0] = new Octree(new Bounds(center + new Vector3(-subWidth, subHeight, subDepth) / 2, size), level + 1);
-        nodes[1] = new Octree(new Bounds(center + new Vector3(subWidth, subHeight, subDepth) / 2, size), level + 1);
-        nodes[2] = new Octree(new Bounds(center + new Vector3(-subWidth, subHeight, -subDepth) / 2, size), level + 1);
-        nodes[3] = new Octree(new Bounds(center + new Vector3(subWidth, subHeight, -subDepth) / 2, size), level + 1);
-        nodes[4] = new Octree(new Bounds(center + new Vector3(-subWidth, -subHeight, subDepth) / 2, size), level + 1);
-        nodes[5] = new Octree(new Bounds(center + new Vector3(subWidth, -subHeight, subDepth) / 2, size), level + 1);
-        nodes[6] = new Octree(new Bounds(center + new Vector3(-subWidth, -subHeight, -subDepth) / 2, size), level + 1);
-        nodes[7] = new Octree(new Bounds(center + new Vector3(subWidth, -subHeight, -subDepth) / 2, size), level + 1);
+        m_nodes[0] = new Octree(new Bounds(center + new Vector3(-subWidth, subHeight, subDepth) * 0.5f, size),
+            m_level + 1);
+        m_nodes[1] = new Octree(new Bounds(center + new Vector3(subWidth, subHeight, subDepth) * 0.5f, size),
+            m_level + 1);
+        m_nodes[2] = new Octree(new Bounds(center + new Vector3(-subWidth, subHeight, -subDepth) * 0.5f, size),
+            m_level + 1);
+        m_nodes[3] = new Octree(new Bounds(center + new Vector3(subWidth, subHeight, -subDepth) * 0.5f, size),
+            m_level + 1);
+        m_nodes[4] = new Octree(new Bounds(center + new Vector3(-subWidth, -subHeight, subDepth) * 0.5f, size),
+            m_level + 1);
+        m_nodes[5] = new Octree(new Bounds(center + new Vector3(subWidth, -subHeight, subDepth) * 0.5f, size),
+            m_level + 1);
+        m_nodes[6] = new Octree(new Bounds(center + new Vector3(-subWidth, -subHeight, -subDepth) * 0.5f, size),
+            m_level + 1);
+        m_nodes[7] = new Octree(new Bounds(center + new Vector3(subWidth, -subHeight, -subDepth) * 0.5f, size),
+            m_level + 1);
     }
 
     private int GetIndex(Vector3 position)
     {
-        int index = -1;
-        Vector3 center = bounds.center;
+        var index = -1;
+        var center = m_bounds.center;
 
-        bool top = position.y > center.y;
-        bool bottom = !top;
-        bool front = position.z > center.z;
-        bool back = !front;
-        bool left = position.x < center.x;
-        bool right = !left;
+        var top = position.y > center.y;
+        var bottom = !top;
+        var front = position.z > center.z;
+        var back = !front;
+        var left = position.x < center.x;
+        var right = !left;
 
         if (top)
         {
@@ -162,14 +152,10 @@ public class Octree
     public void DrawDebug()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(bounds.center, bounds.size);
+        Gizmos.DrawWireCube(m_bounds.center, m_bounds.size);
 
-        if (nodes[0] != null)
-        {
-            for (int i = 0; i < 8; i++)
-            {
-                nodes[i].DrawDebug();
-            }
-        }
+        if (m_nodes[0] != null)
+            for (var i = 0; i < 8; i++)
+                m_nodes[i].DrawDebug();
     }
 }

@@ -1,45 +1,43 @@
-using UnityEngine;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class SMSystem : MonoBehaviour
+public class SMSystem : Singleton<SMSystem>
 {
-    private Dictionary<int, SceneObjectData> objectDictionary = new Dictionary<int, SceneObjectData>();
-    private Octree octree;
+    private readonly Dictionary<Guid, SMComponent> m_smComponents = new();
+    private Octree m_octtree;
 
     private void Awake()
     {
-        octree = new Octree(new Bounds(Vector3.zero, new Vector3(1000, 1000, 1000)), 0);
-    }
-
-    public void RegisterObject(SceneObjectData obj)
-    {
-        if (!objectDictionary.ContainsKey(obj.ID))
-        {
-            objectDictionary.Add(obj.ID, obj);
-            octree.Insert(obj);
-        }
-    }
-
-    public void DeregisterObject(int id)
-    {
-        if (objectDictionary.ContainsKey(id))
-        {
-            SceneObjectData obj = objectDictionary[id];
-            octree.Remove(obj);
-            objectDictionary.Remove(id);
-        }
-    }
-
-    public List<SceneObjectData> QueryRange(Bounds range)
-    {
-        return octree.QueryRange(range);
+        m_octtree = new Octree(new Bounds(Vector3.zero, new Vector3(1000, 1000, 1000)), 0);
     }
 
     private void OnDrawGizmos()
     {
-        if (octree != null)
+        if (m_octtree != null) m_octtree.DrawDebug();
+    }
+
+    public void RegisterObject(SMComponent component)
+    {
+        if (!m_smComponents.ContainsKey(component.Id))
         {
-            octree.DrawDebug();
+            m_smComponents.Add(component.Id, component);
+            m_octtree.Insert(component);
         }
+    }
+
+    public void DeregisterObject(SMComponent component)
+    {
+        if (m_smComponents.ContainsKey(component.Id))
+        {
+            var _component = m_smComponents[component.Id];
+            m_octtree.Remove(_component);
+            m_smComponents.Remove(component.Id);
+        }
+    }
+
+    public List<SMComponent> QueryRange(Bounds range)
+    {
+        return m_octtree.QueryRange(range);
     }
 }

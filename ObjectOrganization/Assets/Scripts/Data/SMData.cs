@@ -11,17 +11,10 @@ public class SMData : ScriptableObject
     public float IneractionRange;
 }
 
-public enum SMObjectType
-{
-    NORMAL,
-    SPECIAL
-}
-
-
 [Serializable]
 public class FreeFormInfo
 {
-    public SMObjectType Type;
+    public TextData Type;
     public string Value;
     public string ShortDescription;
     [TextArea] public string LongDescription;
@@ -31,7 +24,7 @@ public class FreeFormInfo
 [Serializable]
 public class PredefinedInfo
 {
-    public SMObjectType Type;
+    public TextData Type;
     public TextData Value;
     public TextData ShortDescription;
     public TextData LongDescription;

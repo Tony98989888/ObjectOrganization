@@ -1,18 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SMOComponents : SceneObject
+public class SMOComponents : MonoBehaviour
 {
-    private string instanceName;
+    private Bounds m_detectBounds;
+    private string m_instanceName;
 
+    private bool m_LOSActive;
     [SerializeField] private float perceptionRadius;
 
-    private bool needLOS;
-
-    private Bounds detectBounds;
-
-    public List<SceneObjectData> DetectNearbySceneObjects(Bounds detectRange)
+    public List<SMComponent> DetectNearbySceneObjects(Bounds detectRange)
     {
-        return manager.QueryRange(detectRange);
+        return SMSystem.Instance.QueryRange(detectRange);
     }
 }

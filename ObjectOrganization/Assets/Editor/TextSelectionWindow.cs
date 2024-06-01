@@ -5,18 +5,9 @@ public class TextSelectionWindow : EditorWindow
 {
     private static SerializedProperty property;
     private static TextDataList textDataList;
-    private Vector2 scrollPosition;
     private GUIStyle buttonStyle;
+    private Vector2 scrollPosition;
     private string searchText = string.Empty;
-
-    public static void Open(SerializedProperty prop, TextDataList list)
-    {
-        property = prop;
-        textDataList = list;
-        TextSelectionWindow window = GetWindow<TextSelectionWindow>("Select Text");
-        window.minSize = new Vector2(300, 400);
-        window.Show();
-    }
 
     private void OnEnable()
     {
@@ -24,7 +15,7 @@ public class TextSelectionWindow : EditorWindow
         {
             wordWrap = true,
             alignment = TextAnchor.MiddleLeft,
-            fontSize = 18,
+            fontSize = 18
         };
     }
 
@@ -47,7 +38,6 @@ public class TextSelectionWindow : EditorWindow
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
         foreach (var text in textDataList.texts)
-        {
             if (string.IsNullOrEmpty(searchText) || text.ToLower().Contains(searchText.ToLower()))
             {
                 // 使用一个框来显示每个项目
@@ -62,8 +52,16 @@ public class TextSelectionWindow : EditorWindow
                 EditorGUILayout.EndVertical();
                 EditorGUILayout.Space();
             }
-        }
 
         EditorGUILayout.EndScrollView();
+    }
+
+    public static void Open(SerializedProperty prop, TextDataList list)
+    {
+        property = prop;
+        textDataList = list;
+        var window = GetWindow<TextSelectionWindow>("Select Text");
+        window.minSize = new Vector2(300, 400);
+        window.Show();
     }
 }
